@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
-    [SerializeField] private float maxHealth;
-    private float currentHealth;
+    private int maxHealth;
+    private int currentHealth;
 
     private void Awake()
     {
@@ -12,7 +12,7 @@ public class Health : MonoBehaviour
 
     public void takeDamage(float damage)
     {
-        currentHealth = Mathf.Clamp(currentHealth - damage, 0, maxHealth);
+        //currentHealth = Mathf.Clamp(currentHealth - damage, 0, maxHealth);
         if (currentHealth > 0)
         {
 
