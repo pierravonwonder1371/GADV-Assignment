@@ -2,81 +2,65 @@ using UnityEngine;
 
 public class EnemyAI : MonoBehaviour
 {
-    [SerializeField] private float attackCooldown;
-    [SerializeField] private float range;
-    //[SerializeField] private float colliderDistance;
-    [SerializeField] private int damage;
-    //[SerializeField] private BoxCollider2D boxCollider;
+    [SerializeField] private float attackCooldown = 1f;
+    [SerializeField] private float range = 3f;
+    [SerializeField] private int damage = 1;
     [SerializeField] private LayerMask playerLayer;
+    [SerializeField] private LayerMask obstacleLayer;
 
     private float cooldownTimer = Mathf.Infinity;
-    //private Health playerhealth;
 
     private void Update()
     {
         cooldownTimer += Time.deltaTime;
-        if (PlayerInSight())
-        {
 
-            if (cooldownTimer >= attackCooldown)
-            {
-                cooldownTimer = 0;
-            }
+        if (PlayerInSight() && cooldownTimer >= attackCooldown)
+        {
+            DamagePlayer();
+            cooldownTimer = 0;
         }
     }
 
     private bool PlayerInSight()
     {
-        Vector2 origin = transform.position;
-
-        // Detection radius (tweak as needed)
-        float radius = range;
-
-        // Check for any player within the radius
-        Collider2D hit = Physics2D.OverlapCircle(origin, radius, playerLayer);
-
-        //Debug.Log($"{origin}, {hit}");
+        // Check if player is within range
+        Collider2D hit = Physics2D.OverlapCircle(transform.position, range, playerLayer);
 
         if (hit != null && hit.CompareTag("Player"))
         {
-            Debug.Log("Player in sight");
-            return true;
+            // Calculate direction to player
+            Vector2 direction = (hit.transform.position - transform.position).normalized;
+
+            // Cast a ray to check for obstacles
+            RaycastHit2D rayHit = Physics2D.Raycast(transform.position, direction, range,
+                                                    playerLayer | obstacleLayer);
+
+            // If ray hits something
+            if (rayHit.collider != null)
+            {
+                // Check if the thing hit is actually the player
+                if (rayHit.collider.CompareTag("Player"))
+                {
+                    return true; // Player is in sight
+                }
+            }
         }
 
         return false;
     }
 
-
-    //private bool PlayerInSight()
-    //{
-    //    RaycastHit2D hit = Physics2D.BoxCast(boxCollider.bounds.center + transform.right * range * transform.localScale.x * colliderDistance,
-    //    new Vector3(boxCollider.bounds.size.x * range, boxCollider.bounds.size.y, boxCollider.bounds.size.z), 0, Vector2.left, 0, playerLayer);
-
-    //    if (hit.collider != null)
-    //    {
-    //        //playerHealth = hit.transform.GetComponent<Health>();
-
-    //        if(hit.collider.gameObject.tag == "Player")
-    //        {
-    //            Debug.Log("Player in sight");
-    //        }
-    //    }
-
-    //    return hit.collider != null;
-    //}
-
-    //private void OnDrawGizmos()
-    //{
-    //    Gizmos.color = Color.red;
-    //    Gizmos.DrawWireCube(boxCollider.bounds.center + transform.right * range * transform.localScale.x * colliderDistance, new Vector3(boxCollider.bounds.size.x * range, boxCollider.bounds.size.y, boxCollider.bounds.size.z));
-    //}
-
     private void DamagePlayer()
     {
-        //if (PlayerInSight())
-        //{
-            //playerHealth.TakeDamage(damage);
-        //}
-    }
+        Collider2D hit = Physics2D.OverlapCircle(transform.position, range, playerLayer);
 
+        if (hit != null && hit.CompareTag("Player"))
+        {
+            Health playerHealth = hit.GetComponent<Health>();
+            if (playerHealth != null)
+            {
+                playerHealth.TakeDamage(damage);
+                Debug.Log("Damaged player for " + damage);
+            }
+        }
+    }
 }
