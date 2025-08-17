@@ -50,10 +50,5 @@ public class EnemyAI : MonoBehaviour
             }
         }
     }
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, range);
-    }
 }
+//Made with assistance from ChatGPT. ChatGPT was asked to provide improvements to the code to make it more efficient.

@@ -8,7 +8,7 @@ public class Health : MonoBehaviour
     [SerializeField] private int maxHealth = 10;
     private int currentHealth;
 
-    [Header("UI Settings (Player Only)")]
+    [Header("UI Settings")]
     public Image healthImage;
 
     [Header("Invulnerability Settings")]
@@ -16,12 +16,14 @@ public class Health : MonoBehaviour
     [SerializeField] private SpriteRenderer spriteRenderer;
     private bool isInvulnerable = false;
 
-    [Header("Player Control (Player Only)")]
-    [SerializeField] private MonoBehaviour entityControls;
+    [Header("Player Control")]
+    [SerializeField] private MonoBehaviour playerControls;
 
-    [Header("Enemy Settings")]
-    [SerializeField] private bool isEnemy = false;
+    [Header("Animation")]
     [SerializeField] private Animator animator;
+
+    [Header("References")]
+    [SerializeField] private UIManager uiManager;
 
     private void Awake()
     {
@@ -39,13 +41,14 @@ public class Health : MonoBehaviour
     {
         currentHealth = maxHealth;
 
+        // Play respawn / neutral animation
         if (animator != null)
             animator.Play("playerneutral");
 
         UpdateHealthBar();
 
-        if (entityControls != null)
-            entityControls.enabled = true;
+        if (playerControls != null)
+            playerControls.enabled = true;
     }
 
     public void TakeDamage(int damage)
@@ -55,7 +58,7 @@ public class Health : MonoBehaviour
         currentHealth = Mathf.Clamp(currentHealth - damage, 0, maxHealth);
         UpdateHealthBar();
 
-        if (currentHealth > 0)
+        if (currentHealth > 0 && healthImage.fillAmount != 0)
         {
             StartCoroutine(Invulnerability());
         }
@@ -97,17 +100,13 @@ public class Health : MonoBehaviour
 
     private void Die()
     {
-        Debug.Log(gameObject.name + "died!");
-        if (entityControls != null)
-            entityControls.enabled = false;
+        Debug.Log("Player died!");
+        if (playerControls != null)
+            playerControls.enabled = false;
 
-        if (isEnemy)
-        {
-            Destroy(gameObject, 0.5f);
-        }
-        else
-        {
-            Respawn();
-        }
+        if (uiManager != null)
+            uiManager.TriggerGameOver();
+
     }
 }
+//Made with assistance from ChatGPT. ChatGPT was asked to provide improvements to the code to make it more efficient.

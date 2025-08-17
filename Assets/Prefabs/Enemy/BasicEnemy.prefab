@@ -14,7 +14,8 @@ GameObject:
   - component: {fileID: 4915102106482507136}
   - component: {fileID: 5936417260014996660}
   - component: {fileID: 5689695846236188057}
-  m_Layer: 7
+  - component: {fileID: 3192812308672718741}
+  m_Layer: 9
   m_Name: BasicEnemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -80,7 +81,7 @@ SpriteRenderer:
   m_SortingLayerID: -1232554563
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: -997686283776520110, guid: 3f76e4ffce2a65d42b4a43726f3ac7c2, type: 3}
+  m_Sprite: {fileID: -3682825804189043775, guid: ac6739cb53cdc4f41afa2d31a17837e2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -181,7 +182,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &5689695846236188057
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -195,3 +196,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 2
+--- !u!114 &3192812308672718741
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4560052625649416889}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8b846fb8f4e04e4d92baee0bdc334cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deathEffectPrefab: {fileID: 4686641110668212993, guid: ffc0f4336c6ebc548a97ed93c7414cf8, type: 3}
+  deathEffectDuration: 3

@@ -1,35 +1,55 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    public static UIManager Instance;
-    [SerializeField] private GameObject gameOverScreen;
-    private void Awake()
-    {
-        if (Instance == null)
-            Instance = this;
-        else
-            Destroy(gameObject);
+    [SerializeField] private GameObject gameOverPanel;
+    private bool isGameOver = false;
 
-        gameOverScreen.SetActive(false); // make sure it's hidden at start
+    void Start()
+    {
+        gameOverPanel.SetActive(false);
     }
 
-    public void ShowGameOver()
+    void Update()
     {
-        gameOverScreen.SetActive(true);
-        Time.timeScale = 0f; // pause game
+
+        if (isGameOver)
+        {
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                print("Application Quit");
+                Application.Quit();
+            }
+        }
     }
 
-    public void RestartGame()
+    private IEnumerator GameOverSequence()
     {
-        Time.timeScale = 1f;
-        UnityEngine.SceneManagement.SceneManager.LoadScene(
-            UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex
-        );
+        // Show main "Game Over" text immediately
+        gameOverPanel.SetActive(true);
+
+        // Wait 1 second
+        yield return new WaitForSeconds(1f);
     }
 
-    public void QuitGame()
+    public void TriggerGameOver()
     {
-        Application.Quit();
+        if (!isGameOver)
+        {
+            isGameOver = true;
+            gameOverPanel.SetActive(true);
+            Debug.Log("Game Over Screen Shown");
+            StartCoroutine(GameOverSequence());
+        }
     }
 }
+//Made with assistance from ChatGPT. ChatGPT was asked to provide improvements to the code to make it more efficient.

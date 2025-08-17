@@ -2,7 +2,9 @@ using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour
 {
-    [SerializeField] private float attackCooldown;
+    [SerializeField] private float attackCooldown = 2f;
+    [SerializeField] private float attackRange = 5f;
+    [SerializeField] private float attackOffset = 0f;
     private Animator anim;
     private PlayerMovement playerMovement;
     private float cooldownTimer = Mathf.Infinity;
@@ -15,12 +17,11 @@ public class PlayerAttack : MonoBehaviour
 
     private void Update()
     {
+        cooldownTimer += Time.deltaTime;
         if (Input.GetMouseButton(0) && cooldownTimer > attackCooldown && playerMovement.CanAttack())
         {
             Attack();
         }
-
-        cooldownTimer += Time.deltaTime;
     }
 
     private void Attack()
@@ -28,36 +29,32 @@ public class PlayerAttack : MonoBehaviour
         anim.SetTrigger("attack");
         cooldownTimer = 0;
         playerMovement.SetAttacking(true);
+    }
 
-        Vector2 attackPos = (Vector2)transform.position + (Vector2.right * transform.localScale.x * 1f);
-        float radius = 0.5f;
+    public void PerformAttack()
+    {
+        Vector2 attackDirection = transform.localScale.x > 0 ? Vector2.right : Vector2.left;
+        Vector2 attackPos = (Vector2)transform.position + (attackDirection * attackOffset);
 
-        Collider2D[] hits = Physics2D.OverlapCircleAll(attackPos, radius, LayerMask.GetMask("Enemy"));
+        Collider2D[] hits = Physics2D.OverlapCircleAll(attackPos, attackRange, LayerMask.GetMask("Enemy"));
+        
         foreach (Collider2D hit in hits)
         {
-            Health enemyHealth = hit.GetComponent<Health>();
-            if (enemyHealth != null)
+            EnemyDefeat enemy = hit.GetComponent<EnemyDefeat>();
+            if (enemy != null)
             {
-                enemyHealth.TakeDamage(1);
-                Debug.Log("Enemy hit!");
+                enemy.Die();
+                Debug.Log("Enemy destroyed: " + hit.name);
             }
         }
 
-        StartCoroutine(ResetAttack());
+        Debug.Log("Attack performed");
     }
-
-    private void OnDrawGizmosSelected()
+    public void EndAttack()
     {
-        // Draw attack circle in Scene view for debugging
-        Vector2 attackPos = (Vector2)transform.position + (Vector2.right * transform.localScale.x * 1f);
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(attackPos, 0.5f);
-    }
-
-    private System.Collections.IEnumerator ResetAttack()
-    {
-        yield return new WaitForSeconds(attackCooldown);
         playerMovement.SetAttacking(false);
     }
 }
+//Made with assistance from ChatGPT. ChatGPT was asked to provide improvements to the code to make it more efficient.
+//Additional assistance from Gemini. The prompt is the same.
 

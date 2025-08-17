@@ -20,3 +20,4 @@ public class PlayerConditions : MonoBehaviour
         playerHealth.Respawn();
     }
 }
+//Made with assistance from ChatGPT. ChatGPT was asked to provide improvements to the code to make it more efficient.
