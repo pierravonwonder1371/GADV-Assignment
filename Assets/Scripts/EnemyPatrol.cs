@@ -7,6 +7,9 @@ public class EnemyPatrol : MonoBehaviour
     private bool movingLeft;
     private float moveOffset;
 
+    /*To make the enemies feel more natural, a random value is set to
+     movingLeft and moveOffset when the game starts. That way, the starting
+     position, as well as the first direction they move in is completely randomised.*/
     private void Awake()
     {
         initScale = transform.localScale;
@@ -14,6 +17,10 @@ public class EnemyPatrol : MonoBehaviour
         moveOffset = Random.Range(0f, 1f);
     }
 
+    /*The direction of the enemy's movement is reversed when they hit the left and right colliders.
+     These colliders are invisible and do not affect the player, they solely exist to tell the enemy
+     when to turn around. They repeat this process unless they hit the player. There is also code to
+     mirror the sprite whenever they hit the aforementioned collider.*/
     private void Update()
     {
         int direction = movingLeft ? -1 : 1;
@@ -39,3 +46,4 @@ public class EnemyPatrol : MonoBehaviour
     }
 }
 //Made with assistance from ChatGPT. ChatGPT was asked to provide improvements to the code to make it more efficient.
+//Based on this tutorial by Pandemonium: https://www.youtube.com/playlist?list=PLgOEwFbvGm5o8hayFB6skAfa8Z-mw4dPV

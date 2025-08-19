@@ -7,6 +7,10 @@ public class EnemyDefeat : MonoBehaviour
 
     public void Die()
     {
+        /*Die() is called by PlayerAttack whenever an enemy with this attached script is hit
+         while within the range of the player during PerformAttack. Upon death, the enemy
+         object is destroyed. In its place, a particle effect plays for a few seconds before
+         the particles are also destroyed. The duration of the effect is set in the inspector.*/
         if (deathEffectPrefab != null)
         {
             GameObject effect = Instantiate(deathEffectPrefab, transform.position, Quaternion.identity);

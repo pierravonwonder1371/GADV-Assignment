@@ -905,6 +905,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 4915102106482507136, guid: ce908de1806ff444596c5af99f59cc72, type: 3}
+      propertyPath: range
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -11602,6 +11606,10 @@ PrefabInstance:
       propertyPath: healthImage
       value: 
       objectReference: {fileID: 1086562433}
+    - target: {fileID: 8865565276786899048, guid: e60cf0a97c1736d4b8c99f62ef0b9e0c, type: 3}
+      propertyPath: spriteRenderer
+      value: 
+      objectReference: {fileID: 8707114793590370377}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -11988,6 +11996,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26e12255556a7324280291f163628f0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!212 &8707114793590370377 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 311825283409839787, guid: e60cf0a97c1736d4b8c99f62ef0b9e0c, type: 3}
+  m_PrefabInstance: {fileID: 6012043767208899462}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8946421406238434684
 PrefabInstance:
   m_ObjectHideFlags: 0

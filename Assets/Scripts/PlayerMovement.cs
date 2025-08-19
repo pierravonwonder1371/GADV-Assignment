@@ -28,6 +28,11 @@ public class PlayerMovement : MonoBehaviour
 
         if (!isAttacking)
         {
+            /*When moving towards the right (positive X), spriteRenderer.flipX becomes false.
+             There is no need to flip on start as my sprite is already facing right,
+             and this is only used when flipping the sprite from left back to right.
+             However, when moving left (negative X), spriteRenderer.flipX becomes true,
+             flipping the sprite left.*/
             body.linearVelocity = new Vector2(move * speed, body.linearVelocity.y);
 
             if (move > 0)
@@ -47,13 +52,17 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    /*Whenever Jump() is triggered by the space bar, the jumpcount is reduced by 1.
+     When it reaches 0, the player cannot jump anymore. They will have to touch the ground
+    to reset it back to its maxValue (2).*/
     private void Jump()
     {
         body.linearVelocity = new Vector2(body.linearVelocity.x, jump);
-        jumpcount--; //decreases the jump count by one. you cannot jump anymore when it reaches zero.
+        jumpcount--;
     }
 
-    //this entire section is to link the movement script to the attack script.
+    /*This entire section is to link the movement script to the attack script.
+     SetAttacking has its flag set to true by PlayerAttack, and isAttacking is set to true.*/
     public bool CanAttack()
     {
         return !isAttacking && Mathf.Abs(body.linearVelocity.x) < 0.01f && onGroundObject;
@@ -66,7 +75,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        //checks whether the player is on an object tagged "ground" so that it can reset the double-jump
+        /*Checks whether the player is on an object tagged "ground" so that it can reset the double-jump
+        counter. All the terrain that can be walked on (Roof, Bridge, etc.) use the "Ground" tag.
+        If true, the jumpCount is reset back to maxJump (in this case its value is 2), allowing the player
+        to double jump. Additionally, it is also treated as acceptable ground by CanAttack, allowing
+        the player to attack wherever they want.*/
         if (collision.gameObject.CompareTag("Ground") && collision.contacts[0].normal.y > 0.5f)
         {
             isGrounded = true;
@@ -86,3 +99,4 @@ public class PlayerMovement : MonoBehaviour
 
 }
 //Made with assistance from ChatGPT. ChatGPT was asked to provide improvements to the code to make it more efficient.
+//Based on this tutorial by Pandemonium: https://www.youtube.com/playlist?list=PLgOEwFbvGm5o8hayFB6skAfa8Z-mw4dPV
